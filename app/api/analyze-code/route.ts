@@ -72,7 +72,9 @@ export async function POST(request: NextRequest) {
       ? `Do not flag issues that are widely used and accepted patterns in ${language} even if it violates the criteria.`
       : ""
 
-    const prompt = `${languageContext}Please analyze the following code and provide:
+    const prompt = `${languageContext}Please analyze the following code and provide the output in Persian.
+
+Provide:
 1. An overall score out of 100
 2. A brief overall summary of the code quality.
 3. Specific, concise, and actionable suggestions for improvement.
@@ -88,15 +90,15 @@ Evaluation criteria:
 
 ${languageSpecificNote}
 
-Respond with ONLY a valid JSON object in this exact format:
+Respond with ONLY a valid JSON object in this exact format. All string values in the JSON response (summary, category, issue, suggestion) MUST be in Persian.
 {
   "score": number,
-  "summary": "brief overall assessment",
+  "summary": "خلاصه کلی ارزیابی به زبان فارسی",
   "improvements": [
     {
-      "category": "category name",
-      "issue": "specific, concise issue description",
-      "suggestion": "concise, actionable recommendation on how to fix it",
+      "category": "نام دسته بندی به زبان فارسی",
+      "issue": "شرح مختصر و دقیق مشکل به زبان فارسی",
+      "suggestion": "توصیه مختصر و کاربردی برای رفع مشکل به زبان فارسی",
       "severity": "high|medium|low",
       "lineNumber": number | null,
       "codeSnippet": "the problematic code line/snippet" | null
