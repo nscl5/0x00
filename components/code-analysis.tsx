@@ -16,8 +16,8 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-card rounded-lg p-8 border border-border text-center shadow-2xl">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-          <h3 className="text-lg font-medium mb-2 text-card-foreground">Analyzing Your Code</h3>
-          <p className="text-sm text-muted-foreground">This may take a moment...</p>
+          <h3 className="text-lg font-medium mb-2 text-card-foreground">در حال تحلیل کد شما</h3>
+          <p className="text-sm text-muted-foreground">این ممکن است چند لحظه طول بکشد...</p>
         </div>
       </div>
     )
@@ -26,19 +26,19 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
   if (!result) return null
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-400"
-    if (score >= 60) return "text-yellow-400"
-    return "text-red-400"
+    if (score >= 80) return "var(--success)"
+    if (score >= 60) return "var(--warning)"
+    return "var(--danger)"
   }
 
   const getSeverityIcon = (severity: "high" | "medium" | "low") => {
     switch (severity) {
       case "high":
-        return <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+        return <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: "var(--danger)" }} />
       case "medium":
-        return <Info className="w-5 h-5 text-yellow-400 flex-shrink-0" />
+        return <Info className="w-5 h-5 flex-shrink-0" style={{ color: "var(--warning)" }} />
       case "low":
-        return <CheckCircle className="w-5 h-5 text-blue-400 flex-shrink-0" />
+        return <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: "var(--primary)" }} />
       default:
         return null
     }
@@ -47,15 +47,15 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
   return (
     <div className="space-y-8">
       <Card className="p-6 text-center shadow-lg">
-        <h2 className="text-2xl font-bold mb-2 text-card-foreground">Overall Score</h2>
-        <div className={`text-6xl font-bold ${getScoreColor(result.score)}`}>
+        <h2 className="text-2xl font-bold mb-2 text-card-foreground">امتیاز کلی</h2>
+        <div className="text-6xl font-bold" style={{ color: getScoreColor(result.score) }}>
           {result.score}/100
         </div>
         <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">{result.summary}</p>
       </Card>
 
       <Card className="p-6 shadow-lg">
-        <h3 className="text-xl font-bold mb-4 text-card-foreground">Improvement Suggestions</h3>
+        <h3 className="text-xl font-bold mb-4 text-card-foreground">پیشنهادهای بهبود</h3>
         <div className="space-y-4">
           {result.improvements.map((item, index) => (
             <div key={index} className="bg-background/50 rounded-lg p-4 border border-border transition-shadow hover:shadow-md">
@@ -73,12 +73,12 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
                       <pre className="bg-muted p-3 rounded-md text-xs overflow-x-auto text-card-foreground border border-border">
                         <code>{item.codeSnippet}</code>
                       </pre>
-                      {item.lineNumber && <p className="text-xs text-muted-foreground mt-1">Line: {item.lineNumber}</p>}
+                      {item.lineNumber && <p className="text-xs text-muted-foreground mt-1">خط: {item.lineNumber}</p>}
                     </div>
                   )}
 
-                  <p className="text-sm text-green-400/90">
-                    <span className="font-semibold text-green-400">Suggestion:</span> {item.suggestion}
+                  <p className="text-sm" style={{ color: 'var(--success)' }}>
+                    <span className="font-semibold" style={{ color: 'var(--success)' }}>پیشنهاد:</span> {item.suggestion}
                   </p>
                 </div>
               </div>
