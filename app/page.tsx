@@ -63,9 +63,10 @@ export default function Home() {
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="space-y-8">
           <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold text-foreground">مربی کدنویسی</h1>
+            <h1 className="text-4xl font-bold text-foreground">Coding Coach</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              کد خود را آپلود کنید و بازخورد مبتنی بر هوش مصنوعی برای بهبود کیفیت، خوانایی و آمادگی برای تولید دریافت کنید.
+              Upload your code and get AI-powered feedback to improve code quality, maintainability, and production
+              readiness.
             </p>
           </div>
 
@@ -75,7 +76,7 @@ export default function Home() {
             <div className="bg-destructive/10 border border-destructive/20 text-destructive rounded-lg p-4 flex items-center gap-4">
               <AlertTriangle className="w-6 h-6" />
               <div>
-                <h4 className="font-bold">خطا در تحلیل</h4>
+                <h4 className="font-bold">Analysis Error</h4>
                 <p className="text-sm">{analysisError}</p>
               </div>
             </div>

@@ -63,10 +63,10 @@ export function FileUpload({ onFileAnalysis, isAnalyzing }: FileUploadProps) {
           <Upload className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
           <div className="space-y-2">
             <p className="text-lg font-medium text-card-foreground">
-              {isDragActive ? "فایل کد خود را اینجا رها کنید" : "فایل کد خود را آپلود کنید"}
+              {isDragActive ? "Drop your code file here" : "Upload your code file"}
             </p>
             <p className="text-sm text-muted-foreground">
-              پشتیبانی از پایتون، جاوااسکریپت، تایپ‌اسکریپت، جاوا، C++، C#، PHP، روبی، گو، راست، سوئیفت و موارد دیگر
+              Supports Python, JavaScript, TypeScript, Java, C++, C#, PHP, Ruby, Go, Rust, Swift, and more
             </p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export function FileUpload({ onFileAnalysis, isAnalyzing }: FileUploadProps) {
               <File className="h-5 w-5 text-muted-foreground" />
               <div>
                 <p className="font-medium text-card-foreground">{selectedFile.name}</p>
-                <p className="text-sm text-muted-foreground">{(selectedFile.size / 1024).toFixed(1)} کیلوبایت</p>
+                <p className="text-sm text-muted-foreground">{(selectedFile.size / 1024).toFixed(1)} KB</p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={handleRemoveFile} disabled={isAnalyzing}>
@@ -87,7 +87,7 @@ export function FileUpload({ onFileAnalysis, isAnalyzing }: FileUploadProps) {
         )}
 
         <Button onClick={handleAnalyze} disabled={!selectedFile || isAnalyzing} className="w-full" size="lg">
-          {isAnalyzing ? "در حال تحلیل کد..." : "تحلیل کد"}
+          {isAnalyzing ? "Analyzing Code..." : "Analyze Code"}
         </Button>
       </div>
     </Card>

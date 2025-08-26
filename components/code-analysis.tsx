@@ -16,8 +16,8 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="bg-card rounded-lg p-8 border border-border text-center shadow-2xl">
           <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
-          <h3 className="text-lg font-medium mb-2 text-card-foreground">در حال تحلیل کد شما</h3>
-          <p className="text-sm text-muted-foreground">این ممکن است چند لحظه طول بکشد...</p>
+          <h3 className="text-lg font-medium mb-2 text-card-foreground">Analyzing Your Code</h3>
+          <p className="text-sm text-muted-foreground">This may take a moment...</p>
         </div>
       </div>
     )
@@ -47,15 +47,15 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
   return (
     <div className="space-y-8">
       <Card className="p-6 text-center shadow-lg">
-        <h2 className="text-2xl font-bold mb-2 text-card-foreground">امتیاز کلی</h2>
+        <h2 className="text-2xl font-bold mb-2 text-card-foreground">Overall Score</h2>
         <div className="text-6xl font-bold" style={{ color: getScoreColor(result.score) }}>
           {result.score}/100
         </div>
-        <p className="text-muted-foreground mt-3 max-w-2xl mx-auto">{result.summary}</p>
+        <p dir="rtl" className="text-muted-foreground mt-3 max-w-2xl mx-auto">{result.summary}</p>
       </Card>
 
       <Card className="p-6 shadow-lg">
-        <h3 className="text-xl font-bold mb-4 text-card-foreground">پیشنهادهای بهبود</h3>
+        <h3 className="text-xl font-bold mb-4 text-card-foreground">Improvement Suggestions</h3>
         <div className="space-y-4">
           {result.improvements.map((item, index) => (
             <div key={index} className="bg-background/50 rounded-lg p-4 border border-border transition-shadow hover:shadow-md">
@@ -63,22 +63,22 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
                 {getSeverityIcon(item.severity)}
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="font-semibold text-card-foreground">{item.category}</span>
+                    <span dir="rtl" className="font-semibold text-card-foreground">{item.category}</span>
                     <Badge variant="secondary" className="capitalize">{item.severity}</Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">{item.issue}</p>
+                  <p dir="rtl" className="text-sm text-muted-foreground mb-3">{item.issue}</p>
 
                   {item.codeSnippet && (
                     <div className="mb-3">
                       <pre className="bg-muted p-3 rounded-md text-xs overflow-x-auto text-card-foreground border border-border">
                         <code>{item.codeSnippet}</code>
                       </pre>
-                      {item.lineNumber && <p className="text-xs text-muted-foreground mt-1">خط: {item.lineNumber}</p>}
+                      {item.lineNumber && <p className="text-xs text-muted-foreground mt-1">Line: {item.lineNumber}</p>}
                     </div>
                   )}
 
-                  <p className="text-sm" style={{ color: 'var(--success)' }}>
-                    <span className="font-semibold" style={{ color: 'var(--success)' }}>پیشنهاد:</span> {item.suggestion}
+                  <p dir="rtl" className="text-sm" style={{ color: 'var(--success)' }}>
+                    <span className="font-semibold" style={{ color: 'var(--success)' }}>Suggestion:</span> {item.suggestion}
                   </p>
                 </div>
               </div>

@@ -9,8 +9,8 @@ export function Header() {
             <Code2 className="h-6 w-6 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-card-foreground">مربی کدنویسی</h1>
-            <p className="text-sm text-muted-foreground">بررسی کد با هوش مصنوعی</p>
+            <h1 className="text-xl font-semibold text-card-foreground">Coding Coach</h1>
+            <p className="text-sm text-muted-foreground">AI-Powered Code Review</p>
           </div>
         </div>
       </div>

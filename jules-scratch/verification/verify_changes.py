@@ -20,10 +20,10 @@ def run(playwright):
         time.sleep(2)
 
         # Click the "Analyze Code" button
-        page.get_by_role("button", name="تحلیل کد").click()
+        page.get_by_role("button", name="Analyze Code").click()
 
         # Wait for the error message to appear
-        expect(page.get_by_role("heading", name="خطا در تحلیل")).to_be_visible(timeout=60000)
+        expect(page.get_by_role("heading", name="Analysis Error")).to_be_visible(timeout=60000)
 
         # Take a screenshot
         page.screenshot(path="jules-scratch/verification/verification.png")
