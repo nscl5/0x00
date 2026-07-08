@@ -1,8 +1,9 @@
 "use client"
 
+import { useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { AlertCircle, Info, CheckCircle, Loader2 } from "lucide-react"
+import { AlertCircle, Info, CheckCircle, Loader2, Copy, Check } from "lucide-react"
 import type { AnalysisResult } from "@/app/page"
 
 interface CodeAnalysisProps {
@@ -11,6 +12,8 @@ interface CodeAnalysisProps {
 }
 
 export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
+  const [copied, setCopied] = useState(false)
+
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50">
@@ -42,6 +45,13 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
       default:
         return null
     }
+  }
+
+  const handleCopyReport = async () => {
+    if (!result.markdownReport) return
+    await navigator.clipboard.writeText(result.markdownReport)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   return (
@@ -86,6 +96,31 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
           ))}
         </div>
       </Card>
+
+      {result.finalVerdict && (
+        <Card className="p-6 shadow-lg">
+          <h3 className="text-xl font-bold mb-4 text-card-foreground">جمع‌بندی نهایی</h3>
+          <p dir="rtl" className="text-sm text-muted-foreground whitespace-pre-line">{result.finalVerdict}</p>
+        </Card>
+      )}
+
+      {result.markdownReport && (
+        <Card className="p-6 shadow-lg">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold text-card-foreground">گزارش کامل</h3>
+            <button
+              onClick={handleCopyReport}
+              className="flex items-center gap-2 text-sm px-3 py-2 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              {copied ? "کپی شد" : "کپی گزارش کامل"}
+            </button>
+          </div>
+          <p dir="rtl" className="text-xs text-muted-foreground">
+            برای ذخیره در Telegram Saved Messages یا نوت گوشی، روی دکمهٔ بالا بزن و بچسبون.
+          </p>
+        </Card>
+      )}
     </div>
   )
 }
