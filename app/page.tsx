@@ -16,6 +16,8 @@ export interface AnalysisResult {
     lineNumber?: number;
     codeSnippet?: string;
   }>;
+  finalVerdict?: string;
+  markdownReport?: string;
 }
 
 import { AlertTriangle } from "lucide-react"
