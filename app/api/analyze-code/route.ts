@@ -4,7 +4,9 @@ import { GoogleGenAI, Type, ApiError } from "@google/genai";
 const MAX_CONTENT_LENGTH = 50000;
 const MAX_CUSTOM_CRITERIA = 5;
 const MAX_CRITERION_LENGTH = 200;
-const DEFAULT_TIMEOUT = 20000;
+const DEFAULT_TIMEOUT = 35000;
+const PRIMARY_MODEL = "gemini-3.1-flash-lite";
+const FALLBACK_MODEL = "gemini-2.5-flash";
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
@@ -269,10 +271,11 @@ async function analyzeWithGemini(prompt: string, retries: number = 2): Promise<a
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT);
+    const model = attempt === retries ? FALLBACK_MODEL : PRIMARY_MODEL;
 
     try {
       const result = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
+        model,
         contents: [{ role: "user", parts: [{ text: prompt }] }],
         config: {
           responseMimeType: "application/json",
@@ -295,11 +298,15 @@ async function analyzeWithGemini(prompt: string, retries: number = 2): Promise<a
       return JSON.parse(jsonText);
     } catch (error) {
       clearTimeout(timeoutId);
-      console.warn(`تلاش ${attempt + 1} ناموفق:`, error);
+      console.warn(`تلاش ${attempt + 1} با مدل ${model} ناموفق:`, error);
 
       if (attempt === retries) {
         if (error instanceof ApiError) {
-          throw new CodeAnalysisError("خطا در تحلیل کد از طرف Gemini API", 500, error.message);
+          throw new CodeAnalysisError(
+            "سرویس Gemini الان شلوغه، چند دقیقه دیگه دوباره امتحان کن",
+            503,
+            error.message,
+          );
         }
         throw new CodeAnalysisError(
           "خطا در تحلیل کد",
@@ -308,7 +315,7 @@ async function analyzeWithGemini(prompt: string, retries: number = 2): Promise<a
         );
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+      await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
     }
   }
 
