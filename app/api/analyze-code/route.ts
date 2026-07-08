@@ -5,8 +5,9 @@ const MAX_CONTENT_LENGTH = 50000;
 const MAX_CUSTOM_CRITERIA = 5;
 const MAX_CRITERION_LENGTH = 200;
 const DEFAULT_TIMEOUT = 35000;
-const PRIMARY_MODEL = "gemini-3.5-flash";
-const FALLBACK_MODEL = "gemini-2.5-flash";
+const PRIMARY_MODEL = "gemini-2.5-flash";
+const FALLBACK_MODEL = "gemini-3.5-flash";
+export const maxDuration = 60;
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
@@ -21,6 +22,7 @@ const SUPPORTED_LANGUAGES = {
   fs: "F#",
   cc: "C++",
   fsx: "F#",
+  ex: "Elixir",
   lua: "Lua",
   nim: "Nim",
   php: "PHP",
@@ -28,34 +30,33 @@ const SUPPORTED_LANGUAGES = {
   elm: "Elm",
   cpp: "C++",
   cxx: "C++",
+  bash: "Bash",
+  hs: "Haskell",
+  pas: "Pascal",
+  py: "Python",
+  erl: "Erlang",
+  exs: "Elixir",
+  hrl: "Erlang",
   pl: "Perl",
   pm: "Perl",
   rb: "Ruby",
   rs: "Rust",
-  ml: "OCaml",
-  jl: "Julia",
-  dart: "Dart",
-  java: "Java",
-  kt: "Kotlin",
-  bash: "Bash",
-  ex: "Elixir",
-  py: "Python",
-  hs: "Haskell",
-  pas: "Pascal",
-  erl: "Erlang",
-  exs: "Elixir",
-  hrl: "Erlang",
+  sh: "Shell/Bash",
   swift: "Swift",
   scala: "Scala",
-  clj: "Clojure",
-  sh: "Shell/Bash",
+  dart: "Dart",
+  java: "Java",
+  jl: "Julia",
+  kt: "Kotlin",
+  ml: "OCaml",
   js: "JavaScript",
   ts: "TypeScript",
+  clj: "Clojure",
   ps1: "PowerShell",
   vb: "Visual Basic",
   cljs: "ClojureScript",
-  tsx: "React/TypeScript",
   jsx: "React/JavaScript",
+  tsx: "React/TypeScript",
 } as const;
 
 function detectLanguage(filename: string): string {
@@ -288,13 +289,13 @@ class CodeAnalysisError extends Error {
   }
 }
 
-async function analyzeWithGemini(prompt: string, retries: number = 2): Promise<any> {
+async function analyzeWithGemini(prompt: string, retries: number = 3): Promise<any> {
   const ai = new GoogleGenAI({});
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT);
-    const model = attempt === retries ? FALLBACK_MODEL : PRIMARY_MODEL;
+    const model = attempt >= 2 ? FALLBACK_MODEL : PRIMARY_MODEL;
 
     try {
       const result = await ai.models.generateContent({
@@ -303,8 +304,8 @@ async function analyzeWithGemini(prompt: string, retries: number = 2): Promise<a
         config: {
           responseMimeType: "application/json",
           responseSchema: createResponseSchema(),
-          maxOutputTokens: 8192,
           temperature: 0.5,
+          maxOutputTokens: 8192,
           abortSignal: controller.signal,
         },
       });
@@ -339,7 +340,8 @@ async function analyzeWithGemini(prompt: string, retries: number = 2): Promise<a
         );
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
+      const backoff = Math.min(2000 * Math.pow(2, attempt), 8000);
+      await new Promise((resolve) => setTimeout(resolve, backoff));
     }
   }
 
