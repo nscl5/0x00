@@ -4,7 +4,7 @@ import { GoogleGenAI, Type, ApiError } from "@google/genai";
 const MAX_CONTENT_LENGTH = 50000;
 const MAX_CUSTOM_CRITERIA = 5;
 const MAX_CRITERION_LENGTH = 200;
-const DEFAULT_TIMEOUT = 35000;
+const DEFAULT_TIMEOUT = 25000;
 const PRIMARY_MODEL = "gemini-2.5-flash";
 const FALLBACK_MODEL = "gemini-3.5-flash";
 export const maxDuration = 60;
@@ -289,13 +289,13 @@ class CodeAnalysisError extends Error {
   }
 }
 
-async function analyzeWithGemini(prompt: string, retries: number = 3): Promise<any> {
+async function analyzeWithGemini(prompt: string, retries: number = 1): Promise<any> {
   const ai = new GoogleGenAI({});
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT);
-    const model = attempt >= 2 ? FALLBACK_MODEL : PRIMARY_MODEL;
+    const model = attempt === retries ? FALLBACK_MODEL : PRIMARY_MODEL;
 
     try {
       const result = await ai.models.generateContent({
@@ -339,9 +339,6 @@ async function analyzeWithGemini(prompt: string, retries: number = 3): Promise<a
           error instanceof Error ? error.message : "Unknown error",
         );
       }
-
-      const backoff = Math.min(2000 * Math.pow(2, attempt), 8000);
-      await new Promise((resolve) => setTimeout(resolve, backoff));
     }
   }
 
