@@ -35,6 +35,7 @@ export default function Home() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": process.env.NEXT_PUBLIC_ACCESS_TOKEN || "",
         },
         body: JSON.stringify({
           filename: file.name,
