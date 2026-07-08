@@ -80,8 +80,8 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
 
                   {item.codeSnippet && (
                     <div className="mb-3">
-                      <pre className="bg-muted p-3 rounded-md text-xs overflow-x-auto text-card-foreground border border-border">
-                        <code>{item.codeSnippet}</code>
+                      <pre dir="ltr" className="bg-muted p-3 rounded-md text-xs overflow-x-auto max-w-full text-card-foreground border border-border">
+                        <code className="whitespace-pre">{item.codeSnippet}</code>
                       </pre>
                       {item.lineNumber && <p className="text-xs text-muted-foreground mt-1">Line: {item.lineNumber}</p>}
                     </div>
@@ -107,17 +107,17 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
       {result.markdownReport && (
         <Card className="p-6 shadow-lg">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-card-foreground">گزارش کامل</h3>
+            <h3 className="text-xl font-bold text-card-foreground">گزارش جامع</h3>
             <button
               onClick={handleCopyReport}
               className="flex items-center gap-2 text-sm px-3 py-2 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-              {copied ? "کپی شد" : "کپی گزارش کامل"}
+              {copied ? "کپی شد" : "کپی گزارش"}
             </button>
           </div>
           <p dir="rtl" className="text-xs text-muted-foreground">
-            برای ذخیره در Telegram Saved Messages یا نوت گوشی، روی دکمهٔ بالا بزن و بچسبون.
+            برای ذخیره در Saved Messages تلگرام یا نوت گوشی، کپی کنید.
           </p>
         </Card>
       )}
