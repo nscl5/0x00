@@ -71,12 +71,12 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
             <div key={index} className="bg-background/50 rounded-lg p-4 border border-border transition-shadow hover:shadow-md">
               <div className="flex items-start gap-4">
                 {getSeverityIcon(item.severity)}
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 mb-2">
                     <span dir="rtl" className="font-semibold text-card-foreground">{item.category}</span>
                     <Badge variant="secondary" className="capitalize">{item.severity}</Badge>
                   </div>
-                  <p dir="rtl" className="text-sm text-muted-foreground mb-3">{item.issue}</p>
+                  <p dir="rtl" className="text-sm text-muted-foreground mb-3 break-words">{item.issue}</p>
 
                   {item.codeSnippet && (
                     <div className="mb-3">
@@ -87,7 +87,7 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
                     </div>
                   )}
 
-                  <p dir="rtl" className="text-sm" style={{ color: 'var(--success)' }}>
+                  <p dir="rtl" className="text-sm break-words" style={{ color: 'var(--success)' }}>
                     <span className="font-semibold" style={{ color: 'var(--success)' }}>Suggestion:</span> {item.suggestion}
                   </p>
                 </div>
@@ -110,15 +110,36 @@ export function CodeAnalysis({ result, isLoading }: CodeAnalysisProps) {
             <h3 className="text-xl font-bold text-card-foreground">گزارش جامع</h3>
             <button
               onClick={handleCopyReport}
-              className="flex items-center gap-2 text-sm px-3 py-2 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 text-sm px-3 py-2 rounded-md bg-primary text-primary-foreground hover:opacity-90 transition-opacity cursor-pointer"
             >
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               {copied ? "کپی شد" : "کپی گزارش"}
             </button>
           </div>
-          <p dir="rtl" className="text-xs text-muted-foreground">
-            برای ذخیره در Saved Messages تلگرام یا نوت گوشی، کپی کنید.
-          </p>
+          
+          <div dir="rtl" className="space-y-3">
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              اگر به یک گزارش مرتب و کاملاً ساختاریافته نیاز دارید، می‌توانید کل متن گزارش را کپی کرده و آن را به یکی از ربات‌های تلگرامی زیر (که مخصوص رندر کردن و نمایش زیبای فرمت Markdown هستند) بفرستید:
+            </p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              <a
+                href="https://t.me/MarkdownRenderBot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs bg-secondary text-secondary-foreground px-3 py-2 rounded-md hover:opacity-80 transition-opacity"
+              >
+                ربات MarkdownRenderBot@
+              </a>
+              <a
+                href="https://t.me/RichTextEchoBot"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs bg-secondary text-secondary-foreground px-3 py-2 rounded-md hover:opacity-80 transition-opacity"
+              >
+                ربات RichTextEchoBot@
+              </a>
+            </div>
+          </div>
         </Card>
       )}
     </div>
