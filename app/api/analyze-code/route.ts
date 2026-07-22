@@ -1,9 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI, Type, ApiError } from "@google/genai";
 
-const MAX_CONTENT_LENGTH = 50000;
+const MAX_CONTENT_LENGTH = 500000;
 const MAX_CUSTOM_CRITERIA = 5;
-const MAX_CRITERION_LENGTH = 200;
+const MAX_CRITERION_LENGTH = 250;
 const DEFAULT_TIMEOUT = 25000;
 const PRIMARY_MODEL = "gemini-2.5-flash";
 const FALLBACK_MODEL = "gemini-3.5-flash";
